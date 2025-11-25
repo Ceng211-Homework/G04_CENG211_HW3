@@ -4,7 +4,7 @@ package:
 	./mvnw package
 
 run:
-	./mvnw exec:java -Dexec.mainClass="com.g04.app.EsportsManagementApp"
+	./mvnw exec:java -Dexec.mainClass="com.g04.SlidingPuzzle.SlidingPuzzleApp"
 
 clean:
 	./mvnw clean
