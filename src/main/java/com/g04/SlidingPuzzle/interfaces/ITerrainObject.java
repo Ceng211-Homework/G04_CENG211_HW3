@@ -1,6 +1,6 @@
 package com.g04.SlidingPuzzle.interfaces;
 
-import com.g04.SlidingPuzzle.model.Position;
+import com.g04.SlidingPuzzle.model.terrain.Position;
 
 /**
  * Interface for all objects that can exist on the terrain grid.

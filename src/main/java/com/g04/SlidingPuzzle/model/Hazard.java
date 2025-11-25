@@ -4,6 +4,7 @@ import com.g04.SlidingPuzzle.exception.InvalidGameStateException;
 import com.g04.SlidingPuzzle.interfaces.IHazard;
 import com.g04.SlidingPuzzle.interfaces.ITerrainObject;
 import com.g04.SlidingPuzzle.model.enums.HazardType;
+import com.g04.SlidingPuzzle.model.terrain.Position;
 
 /**
  * Abstract base class for all hazard types.

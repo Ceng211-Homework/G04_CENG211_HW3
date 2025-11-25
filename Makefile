@@ -1,4 +1,4 @@
-.PHONY: package run clean
+.PHONY: package run clean test
 
 package:
 	./mvnw package

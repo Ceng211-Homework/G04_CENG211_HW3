@@ -1,8 +1,9 @@
 package com.g04.SlidingPuzzle.model;
 
 import com.g04.SlidingPuzzle.model.enums.Direction;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import com.g04.SlidingPuzzle.model.terrain.Position;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for Position class.

@@ -1,9 +1,11 @@
 package com.g04.SlidingPuzzle.model;
 
 import com.g04.SlidingPuzzle.model.enums.FoodType;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import com.g04.SlidingPuzzle.model.terrain.Position;
+import com.g04.SlidingPuzzle.model.terrain.TerrainGrid;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for TerrainGrid class.
@@ -12,7 +14,7 @@ import static org.junit.Assert.*;
 public class TerrainGridTest {
     private TerrainGrid grid;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         grid = new TerrainGrid();
     }

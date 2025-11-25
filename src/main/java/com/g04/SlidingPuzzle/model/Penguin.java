@@ -1,9 +1,11 @@
 package com.g04.SlidingPuzzle.model;
 
 import com.g04.SlidingPuzzle.exception.InvalidGameStateException;
+import com.g04.SlidingPuzzle.exception.InvalidMoveException;
 import com.g04.SlidingPuzzle.interfaces.ITerrainObject;
 import com.g04.SlidingPuzzle.model.enums.Direction;
 import com.g04.SlidingPuzzle.model.enums.PenguinType;
+import com.g04.SlidingPuzzle.model.terrain.Position;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -75,8 +77,18 @@ public abstract class Penguin implements ITerrainObject {
 
     /**
      * Marks the special ability as used.
+     *
+     * @throws InvalidMoveException if ability has already been used or penguin is removed
      */
     public void useSpecialAbility() {
+        if (isRemoved) {
+            throw InvalidMoveException.penguinRemoved(name);
+        }
+        if (specialAbilityUsed) {
+            throw new InvalidMoveException(
+                String.format("%s cannot use special ability - already used", name)
+            );
+        }
         this.specialAbilityUsed = true;
     }
 
@@ -93,8 +105,16 @@ public abstract class Penguin implements ITerrainObject {
      * Adds a food item to this penguin's inventory.
      *
      * @param food The food item to collect
+     * @throws InvalidGameStateException if food is null
+     * @throws InvalidMoveException if penguin is removed
      */
     public void collectFood(Food food) {
+        if (isRemoved) {
+            throw InvalidMoveException.penguinRemoved(name);
+        }
+        if (food == null) {
+            throw InvalidGameStateException.nullParameter("food");
+        }
         foodInventory.add(food);
     }
 

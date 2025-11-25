@@ -1,6 +1,9 @@
-package com.g04.SlidingPuzzle.model;
+package com.g04.SlidingPuzzle.model.hazards;
 
 import com.g04.SlidingPuzzle.interfaces.ITerrainObject;
+import com.g04.SlidingPuzzle.model.Food;
+import com.g04.SlidingPuzzle.model.Hazard;
+import com.g04.SlidingPuzzle.model.Penguin;
 import com.g04.SlidingPuzzle.model.enums.HazardType;
 
 /**

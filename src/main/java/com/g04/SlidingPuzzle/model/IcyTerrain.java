@@ -1,10 +1,20 @@
 package com.g04.SlidingPuzzle.model;
 
-import com.g04.SlidingPuzzle.game.CollisionHandler;
+import com.g04.SlidingPuzzle.service.CollisionHandler;
 import com.g04.SlidingPuzzle.interfaces.ITerrainObject;
 import com.g04.SlidingPuzzle.model.enums.Direction;
 import com.g04.SlidingPuzzle.model.enums.HazardType;
 import com.g04.SlidingPuzzle.model.enums.PenguinType;
+import com.g04.SlidingPuzzle.model.hazards.HeavyIceBlock;
+import com.g04.SlidingPuzzle.model.hazards.HoleInIce;
+import com.g04.SlidingPuzzle.model.hazards.LightIceBlock;
+import com.g04.SlidingPuzzle.model.hazards.SeaLion;
+import com.g04.SlidingPuzzle.model.penguins.EmperorPenguin;
+import com.g04.SlidingPuzzle.model.penguins.KingPenguin;
+import com.g04.SlidingPuzzle.model.penguins.RockhopperPenguin;
+import com.g04.SlidingPuzzle.model.penguins.RoyalPenguin;
+import com.g04.SlidingPuzzle.model.terrain.Position;
+import com.g04.SlidingPuzzle.model.terrain.TerrainGrid;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,8 +62,8 @@ public class IcyTerrain {
         // Randomly assign player penguin
         playerPenguin = penguins.get((int) (Math.random() * penguins.size()));
 
-        // Initialize collision handler
-        this.collisionHandler = new CollisionHandler(this);
+        // Initialize collision handler with grid
+        this.collisionHandler = new CollisionHandler(grid);
     }
 
     /**

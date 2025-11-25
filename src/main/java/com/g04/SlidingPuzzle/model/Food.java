@@ -3,6 +3,7 @@ package com.g04.SlidingPuzzle.model;
 import com.g04.SlidingPuzzle.exception.InvalidGameStateException;
 import com.g04.SlidingPuzzle.interfaces.ITerrainObject;
 import com.g04.SlidingPuzzle.model.enums.FoodType;
+import com.g04.SlidingPuzzle.model.terrain.Position;
 
 /**
  * Represents a food item on the terrain grid.

@@ -1,8 +1,19 @@
-package com.g04.SlidingPuzzle.game;
+package com.g04.SlidingPuzzle.service;
 
+import com.g04.SlidingPuzzle.exception.InvalidMoveException;
 import com.g04.SlidingPuzzle.interfaces.ITerrainObject;
 import com.g04.SlidingPuzzle.model.*;
 import com.g04.SlidingPuzzle.model.enums.Direction;
+import com.g04.SlidingPuzzle.model.hazards.HeavyIceBlock;
+import com.g04.SlidingPuzzle.model.hazards.HoleInIce;
+import com.g04.SlidingPuzzle.model.hazards.LightIceBlock;
+import com.g04.SlidingPuzzle.model.hazards.SeaLion;
+import com.g04.SlidingPuzzle.model.penguins.EmperorPenguin;
+import com.g04.SlidingPuzzle.model.penguins.KingPenguin;
+import com.g04.SlidingPuzzle.model.penguins.RockhopperPenguin;
+import com.g04.SlidingPuzzle.model.penguins.RoyalPenguin;
+import com.g04.SlidingPuzzle.model.terrain.Position;
+import com.g04.SlidingPuzzle.model.terrain.TerrainGrid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +23,15 @@ import java.util.List;
  * This is a helper class that coordinates sliding, pathfinding, and collision resolution.
  */
 public class CollisionHandler {
-    private final IcyTerrain terrain;
     private final TerrainGrid grid;
 
     /**
-     * Creates a new collision handler for the specified terrain.
+     * Creates a new collision handler for the specified grid.
      *
-     * @param terrain The icy terrain to manage collisions for
+     * @param grid The terrain grid to manage collisions for
      */
-    public CollisionHandler(IcyTerrain terrain) {
-        this.terrain = terrain;
-        this.grid = terrain.getGrid();
+    public CollisionHandler(TerrainGrid grid) {
+        this.grid = grid;
     }
 
     /**
@@ -32,8 +41,17 @@ public class CollisionHandler {
      * @param direction The direction to move
      * @param useSpecialAbility Whether the penguin is using its special ability
      * @return Movement result describing what happened
+     * @throws InvalidMoveException if penguin is removed or direction is null
      */
     public MovementResult movePenguin(Penguin penguin, Direction direction, boolean useSpecialAbility) {
+        // Validate penguin can move
+        if (penguin.isRemoved()) {
+            throw InvalidMoveException.penguinRemoved(penguin.getName());
+        }
+        if (direction == null) {
+            throw new InvalidMoveException("Direction cannot be null");
+        }
+
         MovementResult result = new MovementResult(penguin);
         Position startPos = penguin.getPosition();
 

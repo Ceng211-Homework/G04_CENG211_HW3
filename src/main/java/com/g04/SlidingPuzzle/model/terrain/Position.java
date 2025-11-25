@@ -1,4 +1,4 @@
-package com.g04.SlidingPuzzle.model;
+package com.g04.SlidingPuzzle.model.terrain;
 
 import com.g04.SlidingPuzzle.exception.InvalidPositionException;
 import com.g04.SlidingPuzzle.model.enums.Direction;

@@ -1,5 +1,6 @@
-package com.g04.SlidingPuzzle.model;
+package com.g04.SlidingPuzzle.model.penguins;
 
+import com.g04.SlidingPuzzle.model.Penguin;
 import com.g04.SlidingPuzzle.model.enums.PenguinType;
 
 /**

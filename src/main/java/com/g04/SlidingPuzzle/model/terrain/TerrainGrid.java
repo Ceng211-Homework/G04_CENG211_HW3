@@ -1,5 +1,6 @@
-package com.g04.SlidingPuzzle.model;
+package com.g04.SlidingPuzzle.model.terrain;
 
+import com.g04.SlidingPuzzle.exception.InvalidPositionException;
 import com.g04.SlidingPuzzle.interfaces.ITerrainObject;
 
 import java.util.ArrayList;
@@ -47,11 +48,10 @@ public class TerrainGrid {
      *
      * @param position The position to set
      * @param object The object to place (null for empty)
+     * @throws InvalidPositionException if position is null or out of bounds
      */
     public void set(Position position, ITerrainObject object) {
-        if (!isValidPosition(position)) {
-            return;
-        }
+        validatePosition(position);
         grid.get(position.getRow()).set(position.getCol(), object);
         if (object != null) {
             object.setPosition(position);
@@ -79,12 +79,29 @@ public class TerrainGrid {
     }
 
     /**
+     * Validates a position and throws exception if invalid.
+     *
+     * @param position The position to validate
+     * @throws InvalidPositionException if position is null or out of bounds
+     */
+    private void validatePosition(Position position) {
+        if (position == null) {
+            throw InvalidPositionException.nullPosition();
+        }
+        if (!position.isWithinBounds(GRID_SIZE)) {
+            throw InvalidPositionException.outOfBounds(position.getRow(), position.getCol(), GRID_SIZE);
+        }
+    }
+
+    /**
      * Removes an object from the grid at the specified position.
      *
      * @param position The position to clear
      * @return The removed object, or null if position was empty
+     * @throws InvalidPositionException if position is null or out of bounds
      */
     public ITerrainObject remove(Position position) {
+        validatePosition(position);
         ITerrainObject obj = get(position);
         set(position, null);
         return obj;
@@ -96,12 +113,12 @@ public class TerrainGrid {
      *
      * @param from The source position
      * @param to The target position
-     * @return true if move succeeded, false if invalid positions
+     * @return true if move succeeded, false if source was empty
+     * @throws InvalidPositionException if either position is null or out of bounds
      */
     public boolean move(Position from, Position to) {
-        if (!isValidPosition(from) || !isValidPosition(to)) {
-            return false;
-        }
+        validatePosition(from);
+        validatePosition(to);
         ITerrainObject obj = remove(from);
         if (obj != null) {
             set(to, obj);
