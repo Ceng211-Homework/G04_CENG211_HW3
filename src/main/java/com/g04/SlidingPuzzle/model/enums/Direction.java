@@ -71,13 +71,13 @@ public enum Direction {
      * @return The opposite direction (UP<->DOWN, LEFT<->RIGHT)
      */
     public Direction getOpposite() {
-        switch (this) {
-            case UP: return DOWN;
-            case DOWN: return UP;
-            case LEFT: return RIGHT;
-            case RIGHT: return LEFT;
-            default: throw new IllegalStateException("Unknown direction");
-        }
+        return switch (this) {
+            case UP -> DOWN;
+            case DOWN -> UP;
+            case LEFT -> RIGHT;
+            case RIGHT -> LEFT;
+            default -> throw new IllegalStateException("Unknown direction");
+        };
     }
 
     /**
@@ -87,14 +87,16 @@ public enum Direction {
      * @return The corresponding Direction, or null if invalid
      */
     public static Direction fromInput(String input) {
-        if (input == null) return null;
+        if (input == null)
+            throw new IllegalArgumentException("input cannot be null");
+
         String normalized = input.trim().toUpperCase();
 
         for (Direction dir : values()) {
-            if (dir.shortCode.equals(normalized) || dir.name().equals(normalized)) {
+            if (dir.shortCode.equals(normalized) || dir.toString().equals(normalized)) {
                 return dir;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Unknown direction: " + input);
     }
 }
