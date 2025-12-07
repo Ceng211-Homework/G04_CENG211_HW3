@@ -84,9 +84,10 @@ public enum Direction {
      * Parses a direction from user input (case-insensitive).
      *
      * @param input The user input (U, D, L, R or full names)
-     * @return The corresponding Direction, or null if invalid
+     * @return The corresponding Direction object
+     * @throws IllegalArgumentException if input is not one of the stated options
      */
-    public static Direction fromInput(String input) {
+    public static Direction fromInput(String input) throws IllegalArgumentException {
         if (input == null)
             throw new IllegalArgumentException("input cannot be null");
 
