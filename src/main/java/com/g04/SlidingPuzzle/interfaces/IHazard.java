@@ -21,7 +21,7 @@ public interface IHazard extends ITerrainObject {
      * This method defines the hazard's collision behavior.
      *
      * @param collidingObject The object that collided with this hazard
-     * @return A collision result describing what happened
+     * @return A CollisionResult object describing what happened
      */
     CollisionResult handleCollision(ITerrainObject collidingObject);
 

@@ -8,10 +8,10 @@ import com.g04.SlidingPuzzle.model.enums.HazardType;
 
 /**
  * Represents a Heavy Ice Block hazard.
- * This ice block cannot be moved. Anything that collides with it stops in its
- * tracks.
- * The colliding penguin loses the lightest food item they are carrying as a
- * penalty.
+ * This ice block cannot be moved.
+ * Anything that collides with it stops in its tracks.
+ * The colliding penguin loses the lightest food item they are carrying
+ * as a penalty.
  * If the penguin is not carrying any food item, it is unaffected.
  */
 public class HeavyIceBlock extends Hazard {
