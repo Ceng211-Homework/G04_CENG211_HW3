@@ -1,5 +1,6 @@
 package com.g04.SlidingPuzzle.model;
 
+import com.g04.SlidingPuzzle.exception.InvalidGameStateException;
 import com.g04.SlidingPuzzle.service.CollisionHandler;
 import com.g04.SlidingPuzzle.interfaces.ITerrainObject;
 import com.g04.SlidingPuzzle.model.enums.Direction;
@@ -27,11 +28,18 @@ import java.util.Scanner;
  * Manages the terrain grid, penguin/hazard/food placement, and grid rendering.
  */
 public class IcyTerrain {
+
+    private static final int NUM_OF_PENGUINS = 3;
+    private static final int NUM_OF_HAZARDS = 15;
+    private static final int NUM_OF_FOOD = 20;
+    private static final int NUM_OF_ROUNDS = 4;
+
     private final TerrainGrid grid;
     private final List<Penguin> penguins;
     private Penguin playerPenguin;
     private CollisionHandler collisionHandler;
-    private Scanner scanner;
+    private final Scanner scanner;
+
 
     /**
      * Creates a new icy terrain with an empty grid.
@@ -43,21 +51,41 @@ public class IcyTerrain {
     }
 
     /**
+     * Starts the game - main entry point called from main().
+     * Initializes terrain, displays initial state, and runs the game loop.
+     */
+    public void startGame() {
+        System.out.println("Welcome to Sliding Penguins Puzzle Game App." +
+            " A 10x10 icy terrain grid is being generated.");
+        System.out.println("Penguins, Hazards, and Food items are also being generated. " +
+            "The initial icy terrain grid:");
+
+        initialize();
+
+        System.out.println(renderGrid());
+        displayPenguinInfo();
+
+        runGameLoop(NUM_OF_ROUNDS);
+
+        displayScoreboard();
+    }
+
+    /**
      * Initializes the terrain with penguins, hazards, and food items.
      * - 3 penguins placed on edge squares
      * - 15 hazards placed randomly
      * - 20 food items placed randomly
      * One penguin is randomly assigned as the player's penguin.
      */
-    public void initialize() {
+    private void initialize() {
         // Place 3 penguins on edges
-        placePenguins();
+        placePenguins(NUM_OF_PENGUINS);
 
         // Place 15 hazards
-        placeHazards();
+        placeHazards(NUM_OF_HAZARDS);
 
         // Place 20 food items
-        placeFood();
+        placeFood(NUM_OF_FOOD);
 
         // Randomly assign player penguin
         playerPenguin = penguins.get((int) (Math.random() * penguins.size()));
@@ -67,15 +95,18 @@ public class IcyTerrain {
     }
 
     /**
-     * Places 3 penguins on random edge positions.
+     * Places given number of penguins (at most 4) on random edge positions.
      * Each penguin has a random type (King, Emperor, Royal, or Rockhopper).
      */
-    private void placePenguins() {
+    private void placePenguins(int numOfPenguins) {
+        if (numOfPenguins > 4)
+            throw new InvalidGameStateException("Number of penguins cannot be greater than 4.");
+
         List<Position> edgePositions = grid.getEdgePositions();
         Collections.shuffle(edgePositions);
 
-        for (int i = 0; i < 3; i++) {
-            String name = "P" + (i + 1);
+        for (int i = 0; i < numOfPenguins; i++) {
+            String name = "P" + (i + 1); // P1, P2, P3
             Penguin penguin = createRandomPenguin(name);
             Position pos = edgePositions.get(i);
             grid.set(pos, penguin);
@@ -87,33 +118,30 @@ public class IcyTerrain {
      * Creates a random penguin of a random type.
      *
      * @param name The penguin's identifier
-     * @return A new penguin of random type
+     * @return A new Penguin object of random type
      */
     private Penguin createRandomPenguin(String name) {
         PenguinType type = PenguinType.random();
-        switch (type) {
-            case KING:
-                return new KingPenguin(name);
-            case EMPEROR:
-                return new EmperorPenguin(name);
-            case ROYAL:
-                return new RoyalPenguin(name);
-            case ROCKHOPPER:
-                return new RockhopperPenguin(name);
-            default:
-                throw new IllegalStateException("Unknown penguin type");
-        }
+        return switch (type) {
+            case KING -> new KingPenguin(name);
+            case EMPEROR -> new EmperorPenguin(name);
+            case ROYAL -> new RoyalPenguin(name);
+            case ROCKHOPPER -> new RockhopperPenguin(name);
+            default -> throw new IllegalStateException("Unknown penguin type");
+        };
     }
 
     /**
-     * Places 15 hazards randomly on the grid.
+     * Places the given number of hazards randomly on the grid.
      * Hazards cannot occupy the same space as penguins.
+     *
+     * @param numOfHazards Number of hazards to be placed on the grid
      */
-    private void placeHazards() {
+    private void placeHazards(int numOfHazards) {
         List<Position> availablePositions = getEmptyPositions();
         Collections.shuffle(availablePositions);
 
-        for (int i = 0; i < 15 && i < availablePositions.size(); i++) {
+        for (int i = 0; i < numOfHazards && i < availablePositions.size(); i++) {
             Hazard hazard = createRandomHazard();
             grid.set(availablePositions.get(i), hazard);
         }
@@ -126,29 +154,27 @@ public class IcyTerrain {
      */
     private Hazard createRandomHazard() {
         HazardType type = HazardType.random();
-        switch (type) {
-            case LIGHT_ICE_BLOCK:
-                return new LightIceBlock();
-            case HEAVY_ICE_BLOCK:
-                return new HeavyIceBlock();
-            case SEA_LION:
-                return new SeaLion();
-            case HOLE_IN_ICE:
-                return new HoleInIce();
-            default:
+        return switch (type) {
+            case LIGHT_ICE_BLOCK -> new LightIceBlock();
+            case HEAVY_ICE_BLOCK -> new HeavyIceBlock();
+            case SEA_LION -> new SeaLion();
+            case HOLE_IN_ICE -> new HoleInIce();
+            default ->
                 throw new IllegalStateException("Unknown hazard type: " + type);
-        }
+        };
     }
 
     /**
-     * Places 20 food items randomly on the grid.
+     * Places given number of food items randomly on the grid.
      * Food items cannot occupy the same space as penguins or hazards.
+     *
+     * @param numOfFood Number of food to be placed on the grid
      */
-    private void placeFood() {
+    private void placeFood(int numOfFood) {
         List<Position> availablePositions = getEmptyPositions();
         Collections.shuffle(availablePositions);
 
-        for (int i = 0; i < 20 && i < availablePositions.size(); i++) {
+        for (int i = 0; i < numOfFood && i < availablePositions.size(); i++) {
             Food food = Food.createRandom();
             grid.set(availablePositions.get(i), food);
         }
@@ -175,7 +201,7 @@ public class IcyTerrain {
      *
      * @return String representation of the grid
      */
-    public String renderGrid() {
+    private String renderGrid() {
         StringBuilder sb = new StringBuilder();
         String horizontalBorder = "---------------------------------------------------\n";
 
@@ -210,7 +236,7 @@ public class IcyTerrain {
      *
      * @return List of penguins
      */
-    public List<Penguin> getPenguins() {
+    private List<Penguin> getPenguins() {
         return new ArrayList<>(penguins);
     }
 
@@ -219,7 +245,7 @@ public class IcyTerrain {
      *
      * @return The player's penguin
      */
-    public Penguin getPlayerPenguin() {
+    private Penguin getPlayerPenguin() {
         return playerPenguin;
     }
 
@@ -228,7 +254,7 @@ public class IcyTerrain {
      *
      * @return The terrain grid
      */
-    public TerrainGrid getGrid() {
+    private TerrainGrid getGrid() {
         return grid;
     }
 
@@ -238,32 +264,13 @@ public class IcyTerrain {
      * @param name The penguin name (e.g., "P1")
      * @return The penguin with that name, or null if not found
      */
-    public Penguin getPenguinByName(String name) {
+    private Penguin getPenguinByName(String name) {
         for (Penguin p : penguins) {
             if (p.getName().equals(name)) {
                 return p;
             }
         }
         return null;
-    }
-
-    /**
-     * Starts the game - main entry point called from main().
-     * Initializes terrain, displays initial state, and runs the game loop.
-     */
-    public void startGame() {
-        System.out
-                .println("Welcome to Sliding Penguins Puzzle Game App. An 10x10 icy terrain grid is being generated.");
-        System.out.println("Penguins, Hazards, and Food items are also being generated. The initial icy terrain grid:");
-
-        initialize();
-
-        System.out.println(renderGrid());
-        displayPenguinInfo();
-
-        runGameLoop();
-
-        displayScoreboard();
     }
 
     /**
@@ -279,12 +286,11 @@ public class IcyTerrain {
     }
 
     /**
-     * Runs the main game loop for 4 turns per penguin.
+     * Runs the main game loop for the given number of rounds for each penguin.
      */
-    private void runGameLoop() {
-        final int TOTAL_TURNS = 4;
+    private void runGameLoop(int rounds) {
 
-        for (int turn = 1; turn <= TOTAL_TURNS; turn++) {
+        for (int turn = 1; turn <= rounds; turn++) {
             for (Penguin penguin : penguins) {
                 if (penguin.isRemoved()) {
                     continue; // Skip removed penguins
@@ -338,7 +344,7 @@ public class IcyTerrain {
     private void handleAITurn(Penguin penguin) {
         // AI has 30% chance to use special ability (except Rockhopper - see below)
         boolean useSpecialAbility = false;
-        if (penguin.canUseSpecialAbility() && Math.random() < 0.3) {
+        if (penguin.canUseSpecialAbility() && (Math.random() < 0.3)) {
             useSpecialAbility = true;
         }
 
@@ -518,11 +524,12 @@ public class IcyTerrain {
     private Direction promptDirection() {
         while (true) {
             String input = scanner.nextLine().trim();
-            Direction direction = Direction.fromInput(input);
-            if (direction != null) {
-                return direction;
+            try {
+                return Direction.fromInput(input);
             }
-            System.out.print("Invalid input. Please answer with U (Up), D (Down), L (Left), R (Right) --> ");
+            catch (IllegalArgumentException e) {
+                System.out.print("Invalid input. Please answer with U (Up), D (Down), L (Left), R (Right) --> ");
+            }
         }
     }
 }

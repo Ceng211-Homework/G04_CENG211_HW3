@@ -12,8 +12,8 @@ import com.g04.SlidingPuzzle.model.enums.HazardType;
  * the SeaLion, so the SeaLion starts sliding in the initial direction of the
  * penguin.
  * After collision, both animals can fall from the edges and collide into
- * anything
- * else in the IcyTerrain. If a LightIceBlock collides with a SeaLion, the
+ * anything else in the IcyTerrain.
+ * If a LightIceBlock collides with a SeaLion, the
  * LightIceBlock's movement is transmitted to SeaLion and LightIceBlock stops
  * moving.
  */
