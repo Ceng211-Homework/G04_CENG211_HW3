@@ -1,6 +1,5 @@
 package com.g04.SlidingPuzzle.model.terrain;
 
-import com.g04.SlidingPuzzle.exception.InvalidPositionException;
 import com.g04.SlidingPuzzle.model.enums.Direction;
 
 /**
@@ -85,7 +84,7 @@ public class Position {
 
     @Override
     public int hashCode() {
-        return 31 * row + col;
+        return 101 * row + col;
     }
 
     @Override

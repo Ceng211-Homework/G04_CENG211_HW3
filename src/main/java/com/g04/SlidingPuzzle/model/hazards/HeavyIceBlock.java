@@ -5,6 +5,7 @@ import com.g04.SlidingPuzzle.model.Food;
 import com.g04.SlidingPuzzle.model.Hazard;
 import com.g04.SlidingPuzzle.model.Penguin;
 import com.g04.SlidingPuzzle.model.enums.HazardType;
+import com.g04.SlidingPuzzle.model.terrain.CollisionResult;
 
 /**
  * Represents a Heavy Ice Block hazard.
