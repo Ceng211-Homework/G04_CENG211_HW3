@@ -3,7 +3,6 @@ package com.g04.SlidingPuzzle.model;
 import com.g04.SlidingPuzzle.exception.InvalidGameStateException;
 import com.g04.SlidingPuzzle.exception.InvalidMoveException;
 import com.g04.SlidingPuzzle.interfaces.ITerrainObject;
-import com.g04.SlidingPuzzle.model.enums.Direction;
 import com.g04.SlidingPuzzle.model.enums.PenguinType;
 import com.g04.SlidingPuzzle.model.terrain.Position;
 

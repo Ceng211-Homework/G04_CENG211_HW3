@@ -232,48 +232,6 @@ public class IcyTerrain {
     }
 
     /**
-     * Gets the list of all penguins on the terrain.
-     *
-     * @return List of penguins
-     */
-    private List<Penguin> getPenguins() {
-        return new ArrayList<>(penguins);
-    }
-
-    /**
-     * Gets the player's penguin.
-     *
-     * @return The player's penguin
-     */
-    private Penguin getPlayerPenguin() {
-        return playerPenguin;
-    }
-
-    /**
-     * Gets the terrain grid.
-     *
-     * @return The terrain grid
-     */
-    private TerrainGrid getGrid() {
-        return grid;
-    }
-
-    /**
-     * Gets a penguin by name.
-     *
-     * @param name The penguin name (e.g., "P1")
-     * @return The penguin with that name, or null if not found
-     */
-    private Penguin getPenguinByName(String name) {
-        for (Penguin p : penguins) {
-            if (p.getName().equals(name)) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Displays information about the penguins.
      */
     private void displayPenguinInfo() {
